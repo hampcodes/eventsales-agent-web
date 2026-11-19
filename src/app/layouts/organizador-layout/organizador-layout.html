@@ -1,0 +1,54 @@
+<div class="shell">
+  <aside class="sidebar" [class.oculto]="!menuAbierto()">
+    <div class="sidebar-top">
+      <a class="logo" routerLink="/organizador/my-events">
+        <img class="logo-img" src="logo-eventsales.png" alt="EventSales" />
+      </a>
+      <mat-nav-list class="nav">
+        <a mat-list-item class="nav-item" routerLink="/organizador/dashboard" routerLinkActive="active">
+          <img matListItemIcon class="icon" src="icons/grid.svg" alt="" width="20" height="20" />
+          <span matListItemTitle>Dashboard</span>
+        </a>
+        <a mat-list-item class="nav-item" routerLink="/organizador/my-events" routerLinkActive="active">
+          <img matListItemIcon class="icon icon-off" src="icons/cal.svg" alt="" width="20" height="20" />
+          <img matListItemIcon class="icon icon-on" src="icons/cal-active.svg" alt="" width="20" height="20" />
+          <span matListItemTitle>Mis eventos</span>
+        </a>
+        <a mat-list-item class="nav-item" routerLink="/organizador/event-form" routerLinkActive="active">
+          <img matListItemIcon class="icon icon-off" src="icons/plus.svg" alt="" width="20" height="20" />
+          <img matListItemIcon class="icon icon-on" src="icons/plus-active.svg" alt="" width="20" height="20" />
+          <span matListItemTitle>Crear evento</span>
+        </a>
+        <a mat-list-item class="nav-item" routerLink="/organizador/assistant" routerLinkActive="active">
+          <img matListItemIcon class="icon" src="hampcode.svg" alt="" width="22" height="22" />
+          <span matListItemTitle>Agente HampCode</span>
+        </a>
+      </mat-nav-list>
+    </div>
+    <div class="sidebar-bottom">
+      <div class="user">
+        <span class="avatar">O</span>
+        <div class="user-info">
+          <p class="user-name">Organizador</p>
+          <p class="user-sub">Mi cuenta</p>
+        </div>
+      </div>
+      <button mat-stroked-button class="logout" type="button" (click)="auth.logout()">
+        Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <main class="content">
+    <button
+      type="button"
+      class="menu-btn"
+      [attr.aria-label]="menuAbierto() ? 'Ocultar menú' : 'Mostrar menú'"
+      [attr.aria-expanded]="menuAbierto()"
+      (click)="alternarMenu()"
+    >
+      ☰
+    </button>
+    <router-outlet />
+  </main>
+</div>

@@ -12,7 +12,6 @@ Aplicación web responsiva para vender entradas a eventos.
 ## Cómo trabajar
 Haz solo la pantalla que te pida. Léela en el Figma, impleméntala y verifica que compile.
 Al terminar, lista los archivos creados y qué quedó pendiente.
-No toques rutas, layouts ni tema.
 
 ## Estructura
 Sigue la siguiente estructura:

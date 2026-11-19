@@ -1,0 +1,88 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: var(--bg-base);
+}
+
+a {
+  text-decoration: none;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  padding: 0 64px;
+  background: var(--bg-base);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-primary);
+}
+
+.logo-img {
+  width: auto;
+  height: 36px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.user-link {
+  font: var(--font-small);
+  color: var(--text-muted);
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  background: var(--primary-default);
+  color: var(--text-on-primary);
+  font: var(--font-caption);
+}
+
+.logout {
+  height: 40px;
+  font: var(--font-small);
+  color: var(--text-primary);
+  border-color: var(--border-default);
+  border-radius: var(--radius-md);
+}
+
+.login {
+  height: 40px;
+  font: var(--font-small);
+  border-radius: var(--radius-md);
+}
+
+.content {
+  padding: 40px 64px 64px;
+}
+
+@media (max-width: 900px) {
+  .header {
+    padding: 0 16px;
+  }
+
+  .content {
+    padding: 24px 16px 32px;
+  }
+}
+
+.agente-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}

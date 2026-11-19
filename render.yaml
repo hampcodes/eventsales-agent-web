@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: eventsales-agent-web
+    runtime: static
+    buildCommand: npm ci && sed -i.bak "s|http://localhost:8080/api|$API_URL|" src/environments/environment.ts && npx ng build
+    staticPublishPath: dist/eventsales/browser
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: API_URL
+        value: https://eventsales-agent-api.onrender.com/api
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

@@ -1,0 +1,61 @@
+<header class="title">
+  <h1 class="page-title">Próximos eventos</h1>
+  <p class="page-subtitle">Encuentra y reserva tus entradas.</p>
+</header>
+
+<form class="filters" [formGroup]="filtrosForm">
+  <mat-form-field class="search" appearance="outline" subscriptSizing="dynamic">
+    <img matPrefix class="search-icon" src="icons/search.svg" alt="" width="20" height="20" />
+    <input matInput formControlName="name" placeholder="Buscar eventos, artistas o lugares" />
+    @if (filtrosForm.controls.name.hasError('maxlength')) {
+      <mat-error>Máximo 100 caracteres</mat-error>
+    }
+  </mat-form-field>
+  <mat-chip-listbox formControlName="categoryId" aria-label="Categoría del evento">
+    <mat-chip-option [value]="null">Todos</mat-chip-option>
+    @for (categoria of categorias(); track categoria.id) {
+      <mat-chip-option [value]="categoria.id">{{ categoria.name }}</mat-chip-option>
+    }
+  </mat-chip-listbox>
+</form>
+
+@if (error()) {
+  <p class="api-error">{{ error() }}</p>
+}
+
+<div class="grid">
+  @for (evento of eventos(); track evento.id) {
+    <mat-card class="card" appearance="outlined">
+      <div class="image">
+        <img class="image-img" [src]="evento.imageUrl" alt="" (error)="$any($event.target).style.visibility = 'hidden'" />
+        @if (evento.categoryName) {
+          <span class="tag">{{ evento.categoryName }}</span>
+        }
+      </div>
+      <div class="info">
+        <p class="date">{{ evento.date | date: 'EEE d MMM y' }}</p>
+        <h2 class="name">{{ evento.name }}</h2>
+        <p class="place">{{ evento.city }}</p>
+        <div class="footer">
+          <div class="price">
+            <span class="price-label">Desde</span>
+            <span class="price-value">S/ {{ evento.basePrice }}</span>
+          </div>
+          <a mat-stroked-button class="btn" [routerLink]="['/evento', evento.id]">Ver entradas</a>
+        </div>
+      </div>
+    </mat-card>
+  } @empty {
+    @if (!error()) {
+      <p class="empty">No hay eventos para mostrar.</p>
+    }
+  }
+</div>
+
+<mat-paginator
+  [length]="total()"
+  [pageIndex]="filtrosForm.value.pagina"
+  [pageSize]="filtrosForm.value.tamano"
+  [pageSizeOptions]="[9, 18, 27]"
+  (page)="cambiarPagina($event)"
+/>

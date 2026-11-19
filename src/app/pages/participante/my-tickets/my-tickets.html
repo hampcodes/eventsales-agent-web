@@ -1,0 +1,83 @@
+<header class="title">
+  <h1 class="page-title">Mis entradas</h1>
+  <p class="page-subtitle">Revisa tus compras y consulta el detalle de cada una.</p>
+</header>
+
+<form class="filters" [formGroup]="filtrosForm">
+  <mat-form-field class="search" appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Buscar por evento</mat-label>
+    <input matInput formControlName="name" placeholder="Ej: Festival de Rock" />
+    @if (filtrosForm.controls.name.hasError('maxlength')) {
+      <mat-error>Máximo 100 caracteres</mat-error>
+    }
+  </mat-form-field>
+</form>
+
+@if (error()) {
+  <p class="api-error">{{ error() }}</p>
+}
+
+<div class="list">
+  @for (entrada of entradas(); track entrada.id) {
+    <mat-card class="card" appearance="outlined">
+      <div class="info">
+        <h2 class="name">{{ entrada.eventName }}</h2>
+        <p class="price">S/ {{ entrada.pricePaid }}</p>
+      </div>
+      <span class="status" [class]="entrada.status.toLowerCase()">
+        @switch (entrada.status) {
+          @case ('PENDING') { Pendiente de pago }
+          @case ('PAID') { Pagada }
+          @case ('CANCELLED') { Anulada }
+        }
+      </span>
+      <button mat-stroked-button type="button" (click)="verDetalle(entrada.id)">
+        {{ detalle()?.id === entrada.id ? 'Ocultar detalles' : 'Ver detalles' }}
+      </button>
+      @if (entrada.status === 'PENDING') {
+        @if (porAnular() === entrada.id) {
+          <div class="actions">
+            <span class="ask">¿Anular esta entrada?</span>
+            <button mat-flat-button type="button" (click)="anular(entrada.id)">Sí, anular</button>
+            <button mat-stroked-button type="button" (click)="porAnular.set(null)">No</button>
+          </div>
+        } @else {
+          <button mat-stroked-button type="button" (click)="porAnular.set(entrada.id)">Anular</button>
+        }
+      }
+
+      @if (detalle(); as d) {
+        @if (d.id === entrada.id) {
+          <dl class="detail">
+            <div><dt>Entrada</dt><dd>#{{ d.id }}</dd></div>
+            <div><dt>Fecha del evento</dt><dd>{{ d.eventDate | date: 'EEEE d MMMM y' }}</dd></div>
+            <div><dt>Ciudad</dt><dd>{{ d.eventCity }}</dd></div>
+            <div><dt>Precio</dt><dd>S/ {{ d.pricePaid }}</dd></div>
+            <div>
+              <dt>Pago</dt>
+              <dd>
+                @if (d.paymentMethod) {
+                  {{ d.paymentMethod }} · S/ {{ d.paymentAmount }} · {{ d.paymentStatus === 'APPROVED' ? 'Aprobado' : d.paymentStatus }}
+                } @else {
+                  Sin pago registrado
+                }
+              </dd>
+            </div>
+          </dl>
+        }
+      }
+    </mat-card>
+  } @empty {
+    @if (!error()) {
+      <p class="empty">No hay entradas con esa búsqueda.</p>
+    }
+  }
+</div>
+
+<mat-paginator
+  [length]="total()"
+  [pageIndex]="filtrosForm.value.pagina"
+  [pageSize]="filtrosForm.value.tamano"
+  [pageSizeOptions]="[5, 10, 20]"
+  (page)="cambiarPagina($event)"
+/>

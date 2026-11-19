@@ -1,0 +1,138 @@
+<header class="page-heading">
+  <h1 class="page-title">{{ eventoId ? 'Editar evento' : 'Crear evento' }}</h1>
+  <p class="page-subtitle">
+    {{ eventoId ? 'Actualiza los datos de tu evento.' : 'Completa los datos y publícalo en una categoría.' }}
+  </p>
+</header>
+
+<form class="body" [formGroup]="form" (ngSubmit)="guardar()">
+  <section class="form-card">
+    <h2 class="section-title">Información básica</h2>
+
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Nombre del evento</mat-label>
+      <input matInput formControlName="name" />
+      @if (form.controls.name.hasError('required') || form.controls.name.hasError('pattern')) {
+        <mat-error>Ingresa el nombre del evento</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="field-group">
+      <span class="field-label">Categoría</span>
+      <mat-chip-listbox formControlName="categoryId" aria-label="Categoría">
+        @for (categoria of categorias(); track categoria.id) {
+          <mat-chip-option [value]="categoria.id">{{ categoria.name }}</mat-chip-option>
+        }
+      </mat-chip-listbox>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Fecha</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date" readonly (click)="picker.open()" />
+        <mat-datepicker-toggle matIconSuffix [for]="picker" />
+        <mat-datepicker #picker />
+        @if (form.controls.date.hasError('required')) {
+          <mat-error>Selecciona la fecha</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Ciudad</mat-label>
+        <input matInput formControlName="city" />
+        @if (form.controls.city.hasError('required') || form.controls.city.hasError('pattern')) {
+          <mat-error>Ingresa la ciudad</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="field-group">
+      <span class="field-label">Imagen del evento *</span>
+      <input
+        #imagen
+        class="file-input"
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        (change)="elegirImagen($event)"
+      />
+      <button
+        type="button"
+        class="dropzone"
+        [class.has-image]="form.controls.imageUrl.value"
+        (click)="imagen.click(); form.controls.imageUrl.markAsTouched()"
+      >
+        @if (form.controls.imageUrl.value) {
+          <img class="dropzone-img" [src]="form.controls.imageUrl.value" alt="Imagen del evento" />
+        } @else {
+          <mat-icon class="dropzone-icon">cloud_upload</mat-icon>
+          <span class="dropzone-title">Haz clic para subir una imagen</span>
+          <span class="dropzone-hint">PNG, JPG o WebP · máximo 5 MB</span>
+        }
+      </button>
+      @if (subiendo()) {
+        <span class="field-label">Subiendo imagen…</span>
+      }
+      @if (form.controls.imageUrl.touched && form.controls.imageUrl.hasError('required') && !subiendo()) {
+        <mat-error>Sube la imagen del evento</mat-error>
+      }
+    </div>
+
+    <mat-divider />
+
+    <h2 class="section-title">Entradas</h2>
+
+    <div class="row">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Precio base (S/)</mat-label>
+        <input matInput type="number" formControlName="basePrice" />
+        @if (form.controls.basePrice.hasError('required')) {
+          <mat-error>Ingresa el precio</mat-error>
+        } @else if (form.controls.basePrice.hasError('min')) {
+          <mat-error>El precio debe ser mayor a 0</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Capacidad máxima</mat-label>
+        <input matInput type="number" formControlName="capacityMax" />
+        @if (form.controls.capacityMax.hasError('required')) {
+          <mat-error>Ingresa la capacidad</mat-error>
+        } @else if (form.controls.capacityMax.hasError('min') || form.controls.capacityMax.hasError('pattern')) {
+          <mat-error>La capacidad debe ser un número entero mayor a 0</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </section>
+
+  <aside class="side">
+    <div class="preview">
+      <div class="preview-image">
+        @if (form.controls.imageUrl.value) {
+          <img class="preview-img" [src]="form.controls.imageUrl.value" alt="" />
+        }
+        <mat-chip-set>
+          <mat-chip class="preview-tag">Música</mat-chip>
+        </mat-chip-set>
+      </div>
+      <div class="preview-info">
+        <p class="preview-fecha">SÁB 14 DIC</p>
+        <p class="preview-titulo">Neon Nights Festival</p>
+        <p class="preview-lugar">Lima</p>
+        <p class="preview-precio">Desde S/ 45</p>
+      </div>
+    </div>
+
+    @if (error()) {
+      <p class="api-error">{{ error() }}</p>
+    }
+
+    <button
+      mat-flat-button
+      class="btn"
+      type="submit"
+      [disabled]="form.invalid || subiendo() || guardando()"
+    >
+      {{ eventoId ? 'Guardar cambios' : 'Crear evento' }}
+    </button>
+  </aside>
+</form>

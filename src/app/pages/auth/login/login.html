@@ -1,0 +1,37 @@
+<form class="form" [formGroup]="form" (ngSubmit)="entrar()">
+  <h2 class="form-title">Inicia sesión</h2>
+  <p class="form-text">Bienvenido de nuevo. Ingresa para comprar tus entradas.</p>
+
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Correo electrónico</mat-label>
+    <input matInput type="email" formControlName="email" placeholder="tu@correo.com" />
+    @if (form.controls.email.hasError('required')) {
+      <mat-error>Ingresa tu correo electrónico</mat-error>
+    } @else if (form.controls.email.hasError('email')) {
+      <mat-error>Ingresa un correo válido</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Contraseña</mat-label>
+    <input matInput type="password" formControlName="password" placeholder="••••••••" />
+    @if (form.controls.password.hasError('required')) {
+      <mat-error>Ingresa tu contraseña</mat-error>
+    }
+  </mat-form-field>
+
+  <a class="forgot" routerLink="/login">¿Olvidaste tu contraseña?</a>
+
+  @if (error()) {
+    <p class="api-error">{{ error() }}</p>
+  }
+
+  <button mat-flat-button class="submit" type="submit" [disabled]="form.invalid || cargando()">
+    Iniciar sesión
+  </button>
+
+  <p class="form-footer">
+    <span>¿No tienes cuenta?</span>
+    <a routerLink="/registro">Crear cuenta</a>
+  </p>
+</form>

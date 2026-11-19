@@ -1,0 +1,78 @@
+@if (error()) {
+  <p class="api-error">{{ error() }}</p>
+}
+
+@if (evento(); as evento) {
+  <div class="layout">
+    <section class="main">
+      <div class="hero">
+        <img class="hero-img" [src]="evento.imageUrl" alt="" (error)="$any($event.target).style.visibility = 'hidden'" />
+      </div>
+      <p class="meta">
+        {{ evento.date | date: 'EEE d MMM y' | uppercase }} · {{ evento.city | uppercase }}
+        @if (evento.categoryName) {
+          · {{ evento.categoryName | uppercase }}
+        }
+      </p>
+      <h1 class="title">{{ evento.name }}</h1>
+      <p class="description">Organiza: {{ evento.organizerName }}</p>
+
+      <h2 class="section-title">Tu entrada</h2>
+
+      @if (evento.date < hoy) {
+        <p class="ticket-error">Este evento ya pasó: no se pueden comprar entradas.</p>
+      } @else if (evento.availableCapacity <= 0) {
+        <p class="ticket-error">Las entradas de este evento están agotadas.</p>
+      }
+
+      <mat-card class="ticket selected" appearance="outlined">
+        <div class="ticket-info">
+          <p class="ticket-name">Entrada general</p>
+          <p class="ticket-desc">
+            Quedan {{ evento.availableCapacity }} de {{ evento.capacityMax }} entradas
+          </p>
+          <p class="ticket-price">S/ {{ evento.basePrice }}</p>
+        </div>
+      </mat-card>
+    </section>
+
+    <aside class="summary-col">
+      <mat-card class="summary" appearance="outlined">
+        <h2 class="summary-title">Resumen</h2>
+        <p class="summary-event">{{ evento.name }}</p>
+        <mat-divider />
+        <div class="row">
+          <span class="row-label">Entrada general × 1</span>
+          <span>S/ {{ evento.basePrice }}</span>
+        </div>
+        <mat-divider />
+        <div class="row total">
+          <span class="row-label">Total</span>
+          <span>S/ {{ evento.basePrice }}</span>
+        </div>
+        @if (auth.session()) {
+          <a
+            mat-flat-button
+            class="btn"
+            routerLink="/participante/assistant"
+            [queryParams]="{ comprar: evento.name }"
+            [disabled]="evento.date < hoy || evento.availableCapacity <= 0"
+          >
+            Comprar con HampCode
+          </a>
+        } @else {
+          <a
+            mat-flat-button
+            class="btn"
+            routerLink="/login"
+            [queryParams]="{ returnUrl: '/evento/' + evento.id }"
+            [disabled]="evento.date < hoy || evento.availableCapacity <= 0"
+          >
+            Inicia sesión para continuar
+          </a>
+        }
+        <p class="secure">Pago simulado, sin cobro real</p>
+      </mat-card>
+    </aside>
+  </div>
+}

@@ -1,0 +1,137 @@
+<mat-toolbar class="header">
+  <a class="logo" routerLink="/">
+    <img class="logo-img" src="logo-eventsales.png" alt="EventSales" />
+  </a>
+  <nav class="header-actions">
+    <a mat-stroked-button class="btn" routerLink="/login">Iniciar sesión</a>
+    <a mat-flat-button class="btn" routerLink="/registro">Crear cuenta</a>
+  </nav>
+</mat-toolbar>
+
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">ENTRADAS PARA EVENTOS EN PERÚ</p>
+    <h1 class="hero-title">Descubre eventos y compra tu entrada en pocos pasos</h1>
+    <p class="hero-text">
+      Revisa fecha, ciudad, precio y cupos de cada evento y compra tu entrada con la ayuda del agente HampCode.
+    </p>
+    <div class="hero-actions">
+      <a mat-flat-button class="btn" routerLink="/registro">Crear cuenta</a>
+      <a mat-stroked-button class="btn" routerLink="/participante/events">Ver eventos</a>
+    </div>
+  </div>
+  <img class="hero-image" src="auth-hero.png" alt="Entradas, calendario y ubicación de un evento" />
+</section>
+
+<section class="section proximos">
+  <div class="title-row">
+    <h2 class="section-title">Próximos eventos</h2>
+    <a class="link-accent" routerLink="/participante/events">Ver todos</a>
+  </div>
+  @if (error()) {
+    <p class="api-error">{{ error() }}</p>
+  } @else if (eventos().length === 0) {
+    <p class="empty">No hay eventos próximos por ahora.</p>
+  }
+  <div class="eventos-grid">
+    @for (evento of eventos(); track evento.id) {
+      <mat-card appearance="outlined" class="evento-card">
+        <div class="evento-image">
+          <img class="evento-img" [src]="evento.imageUrl" alt="" (error)="$any($event.target).style.visibility = 'hidden'" />
+          @if (evento.categoryName) {
+            <mat-chip-set>
+              <mat-chip class="evento-tag">{{ evento.categoryName }}</mat-chip>
+            </mat-chip-set>
+          }
+        </div>
+        <div class="evento-info">
+          <p class="evento-fecha">{{ evento.date | date: 'EEE d MMM' | uppercase }}</p>
+          <p class="evento-titulo">{{ evento.name }}</p>
+          <p class="evento-lugar">{{ evento.city }}</p>
+          <div class="evento-footer">
+            <div>
+              <p class="evento-desde">Desde</p>
+              <p class="evento-precio">S/ {{ evento.basePrice }}</p>
+            </div>
+            <a mat-stroked-button class="btn" [routerLink]="['/evento', evento.id]">Ver entradas</a>
+          </div>
+        </div>
+      </mat-card>
+    }
+  </div>
+</section>
+
+<section class="agente">
+  <div class="agente-contenido">
+    <div class="agente-copy">
+      <img class="agente-avatar" src="hampcode.svg" alt="HampCode, el agente de EventSales" width="72" height="72" />
+      <p class="eyebrow">AGENTE DE INTELIGENCIA ARTIFICIAL</p>
+      <h2 class="section-title">Conoce a HampCode</h2>
+      <p class="agente-texto">Escríbele como a una persona: entiende lo que pides y consulta los datos reales de la plataforma.</p>
+      <ul class="agente-lista">
+        <li><b>Busca eventos</b> por ciudad o nombre y te dice sus precios y cupos.</li>
+        <li><b>Compra tus entradas:</b> te muestra el evento y el precio, y confirmas con un botón.</li>
+        <li><b>Resuelve tus dudas</b> sobre reembolsos, pagos y cambios con las políticas de la plataforma.</li>
+      </ul>
+      <a mat-flat-button class="btn" routerLink="/registro">Crear cuenta para probarlo</a>
+    </div>
+    <div class="agente-ejemplos">
+      <p class="ejemplos-titulo">Pregúntale cosas como:</p>
+      @for (pregunta of ejemplos; track pregunta) {
+        <p class="ejemplo">{{ pregunta }}</p>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="como-funciona">
+  <div class="como-content">
+    <h2 class="section-title">Cómo funciona</h2>
+    <div class="pasos">
+      @for (paso of pasos; track paso.numero) {
+        <div class="paso">
+          <div class="paso-media">
+            <img class="paso-imagen" [src]="paso.imagen" [alt]="paso.alt" loading="lazy" />
+            <span class="paso-badge">{{ paso.numero }}</span>
+          </div>
+          <div class="paso-cuerpo">
+            <h3 class="paso-titulo">{{ paso.titulo }}</h3>
+            <p class="paso-texto">{{ paso.texto }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-marca">
+      <a class="logo" routerLink="/">
+        <img class="logo-img" src="logo-eventsales-blanco.png" alt="EventSales" />
+      </a>
+      <p class="footer-descripcion">Plataforma para descubrir eventos y comprar entradas en el Perú, con un agente de inteligencia artificial.</p>
+      <span class="insignia">PROYECTO ACADÉMICO</span>
+    </div>
+    <div class="footer-enlaces">
+      <div class="footer-col">
+        <p class="footer-col-titulo">Explora</p>
+        <a routerLink="/participante/events">Ver todos los eventos</a>
+        <a routerLink="/login">Iniciar sesión</a>
+        <a routerLink="/registro">Crear cuenta</a>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-titulo">Legal</p>
+        <a routerLink="/terminos">Términos y condiciones</a>
+      </div>
+    </div>
+  </div>
+  <p class="footer-aviso">
+    EventSales es un proyecto académico con fines educativos: los pagos son simulados y las entradas no tienen validez real.
+  </p>
+  <mat-divider />
+  <div class="footer-legal">
+    <p>© 2026 EventSales · Proyecto académico</p>
+    <p>Elaborado por Henry Antonio Mendoza Puerta by hampcode</p>
+  </div>
+</footer>

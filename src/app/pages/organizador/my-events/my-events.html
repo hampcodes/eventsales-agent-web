@@ -1,0 +1,99 @@
+<header class="page-header">
+  <div class="page-heading">
+    <h1 class="page-title">Mis eventos</h1>
+    <p class="page-subtitle">Administra y edita tus eventos.</p>
+  </div>
+  <a mat-flat-button class="btn" routerLink="/organizador/event-form">Crear evento</a>
+</header>
+
+<form class="filters" [formGroup]="filtrosForm">
+  <mat-form-field class="search" appearance="outline" subscriptSizing="dynamic">
+    <img matPrefix class="search-icon" src="icons/search.svg" alt="" width="20" height="20" />
+    <input matInput formControlName="name" placeholder="Buscar mis eventos" />
+    @if (filtrosForm.controls.name.hasError('maxlength')) {
+      <mat-error>Máximo 100 caracteres</mat-error>
+    }
+  </mat-form-field>
+  <mat-chip-listbox formControlName="categoryId" aria-label="Categoría del evento">
+    <mat-chip-option [value]="null">Todas</mat-chip-option>
+    @for (categoria of categorias(); track categoria.id) {
+      <mat-chip-option [value]="categoria.id">{{ categoria.name }}</mat-chip-option>
+    }
+  </mat-chip-listbox>
+</form>
+
+@if (error()) {
+  <p class="api-error">{{ error() }}</p>
+}
+
+<div class="table-card">
+  <table mat-table [dataSource]="eventos()">
+    <ng-container matColumnDef="evento">
+      <th mat-header-cell *matHeaderCellDef>Evento</th>
+      <td mat-cell *matCellDef="let evento">
+        <div class="evento-cell">
+          <img class="evento-thumb" [src]="evento.imageUrl" alt="" (error)="$any($event.target).style.visibility = 'hidden'" />
+          <span class="evento-nombre">{{ evento.name }}</span>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="categoria">
+      <th mat-header-cell *matHeaderCellDef>Categoría</th>
+      <td mat-cell *matCellDef="let evento">{{ evento.categoryName ?? '—' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha">
+      <th mat-header-cell *matHeaderCellDef>Fecha</th>
+      <td mat-cell *matCellDef="let evento">{{ evento.date | date: 'dd/MM/yyyy' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="ciudad">
+      <th mat-header-cell *matHeaderCellDef>Ciudad</th>
+      <td mat-cell *matCellDef="let evento">{{ evento.city }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="precio">
+      <th mat-header-cell *matHeaderCellDef>Precio base</th>
+      <td mat-cell *matCellDef="let evento">S/ {{ evento.basePrice }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="vendidas">
+      <th mat-header-cell *matHeaderCellDef>Vendidas</th>
+      <td mat-cell *matCellDef="let evento">
+        <div class="vendidas-cell">
+          <span>{{ evento.capacityMax - evento.availableCapacity }} / {{ evento.capacityMax }}</span>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="((evento.capacityMax - evento.availableCapacity) * 100) / evento.capacityMax"
+          />
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let evento">
+        <a class="editar" [routerLink]="['/organizador/event-form', evento.id]">Editar</a>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+    <tr mat-row *matRowDef="let fila; columns: columnas"></tr>
+  </table>
+
+  @if (eventos().length === 0) {
+    <p class="empty">No hay eventos para mostrar.</p>
+  }
+
+  @if (total() > 0) {
+    <mat-paginator
+      [length]="total()"
+      [pageIndex]="filtrosForm.value.pagina"
+      [pageSize]="filtrosForm.value.tamano"
+      [pageSizeOptions]="[5, 10, 20]"
+      (page)="cambiarPagina($event)"
+      aria-label="Paginación de eventos"
+    />
+  }
+</div>

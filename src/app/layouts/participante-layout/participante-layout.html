@@ -1,0 +1,23 @@
+<mat-toolbar class="header">
+  <a class="logo" [routerLink]="auth.session() ? '/participante/events' : '/'">
+    <img class="logo-img" src="logo-eventsales.png" alt="EventSales" />
+  </a>
+  <div class="user">
+    @if (auth.session()) {
+      <a class="user-link agente-link" routerLink="/participante/assistant">
+        <img src="hampcode.svg" alt="" width="24" height="24" />Agente HampCode
+      </a>
+      <a class="user-link" routerLink="/participante/my-tickets">Mis entradas</a>
+      <span class="avatar">U</span>
+      <button mat-stroked-button class="logout" type="button" (click)="auth.logout()">
+        Cerrar sesión
+      </button>
+    } @else {
+      <a mat-flat-button class="login" routerLink="/login">Iniciar sesión</a>
+    }
+  </div>
+</mat-toolbar>
+
+<main class="content">
+  <router-outlet />
+</main>

@@ -47,10 +47,16 @@
   --mat-sys-surface-container-high: var(--bg-elevated);
   --mat-sys-outline: var(--border-default);
   --mat-sys-outline-variant: var(--border-default);
+  /* Los botones con borde usan el azul de la marca: con el gris claro se confundían con el fondo */
+  --mat-button-outlined-outline-color: var(--primary-default);
+  --mat-button-outlined-outline-width: 1.5px;
   --mat-sys-corner-medium: var(--radius-md);
   --mat-sys-corner-large: var(--radius-md);
   --mat-sys-body-large-font: var(--font-family);
+  --mat-sys-body-medium-font: var(--font-family);
+  --mat-sys-body-small-font: var(--font-family);
   --mat-sys-label-large-font: var(--font-family);
+  --mat-sys-label-medium-font: var(--font-family);
   --mat-sys-title-medium-font: var(--font-family);
   --mat-sys-headline-small-font: var(--font-family);
 }

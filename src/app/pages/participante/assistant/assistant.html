@@ -1,0 +1,170 @@
+<header class="title">
+  <h1 class="page-title"><img class="icono-agente" src="hampcode.svg" alt="" width="44" height="44" />Agente HampCode</h1>
+  <p class="page-subtitle">
+    @if (esOrganizador) {
+      Pregúntale por tus ventas: te responde con datos y gráficos.
+    } @else {
+      Escríbele: busca eventos y compra entradas.
+    }
+  </p>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <button mat-flat-button type="button" class="nueva" [disabled]="escribiendo()" (click)="nueva()">+ Nueva conversación</button>
+    <nav class="lista" aria-label="Conversaciones">
+      @for (c of conversaciones(); track c.id) {
+        <div class="item" [class.activa]="c.id === conversacionId()">
+          <button type="button" class="abrir" [title]="c.title" (click)="abrir(c.id)">{{ c.title }}</button>
+          @if (porBorrar() === c.id) {
+            <button mat-button type="button" class="mini" (click)="borrar(c.id)">Borrar</button>
+            <button mat-button type="button" class="mini" (click)="porBorrar.set(null)">No</button>
+          } @else {
+            <button type="button" class="x" aria-label="Borrar conversación" (click)="porBorrar.set(c.id)">✕</button>
+          }
+        </div>
+      } @empty {
+        @if (errorLista()) {
+          <p class="vacio vacio-error">No se pudieron cargar tus conversaciones. Revisa que el backend esté actualizado y reiniciado.</p>
+        } @else {
+          <p class="vacio">Aún no tienes conversaciones.</p>
+        }
+      }
+    </nav>
+  </aside>
+
+  <div class="main">
+<section class="chat" #chat>
+  @for (mensaje of mensajes(); track $index; let ultimo = $last) {
+    <div class="msg" [class]="mensaje.autor">
+      @if (mensaje.autor === 'agente') {
+        <img class="avatar-agente" src="hampcode.svg" alt="" width="34" height="34" />
+      }
+      <p class="text">{{ mensaje.texto }}</p>
+
+      @if (mensaje.respuesta; as r) {
+        @for (evento of r.events; track evento.id) {
+          <mat-card class="event" appearance="outlined">
+            <div>
+              <p class="event-name">{{ evento.name }}</p>
+              <p class="event-meta">
+                {{ evento.date | date: 'EEE d MMM y' }} · {{ evento.city }} · S/ {{ evento.basePrice }} ·
+                {{ evento.availableCapacity }} cupos
+              </p>
+            </div>
+            <button mat-stroked-button type="button" (click)="verDetalle(evento.id)">
+              {{ estaAbierto(evento.id) ? 'Ocultar' : 'Ver' }}
+            </button>
+            @if (estaAbierto(evento.id)) {
+              <ng-container *ngTemplateOutlet="detalle; context: { $implicit: evento.id }" />
+            }
+          </mat-card>
+        }
+        @if (r.purchase?.status === 'PAID') {
+          <mat-card class="event" appearance="outlined">
+            <div>
+              <p class="event-name">{{ r.purchase?.eventName }}</p>
+              <p class="event-meta">
+                Entrada #{{ r.purchase?.ticketId }} · Pagada · S/ {{ r.purchase?.price }}
+              </p>
+            </div>
+            <a mat-stroked-button routerLink="/participante/my-tickets">Mis entradas</a>
+          </mat-card>
+        }
+        @if (r.file; as file) {
+          <mat-card class="event" appearance="outlined">
+            <p class="event-name">{{ file.name }}</p>
+            <button mat-flat-button type="button" (click)="descargar(file)">Descargar</button>
+          </mat-card>
+        }
+        <!-- Confirmación con botón: solo en el último mensaje, para no confirmar algo viejo -->
+        @if (ultimo && r.purchase?.status === 'CONFIRMATION_REQUIRED') {
+          <mat-card class="event" appearance="outlined">
+            <div>
+              <p class="event-name">{{ r.purchase?.eventName }}</p>
+              <p class="event-meta">
+                  ¿Confirmas la compra por S/ {{ r.purchase?.price }}?
+              </p>
+            </div>
+            <div class="actions">
+              <button mat-stroked-button type="button" (click)="verDetalle(r.purchase?.eventId)">
+                {{ estaAbierto(r.purchase?.eventId) ? 'Ocultar' : 'Ver' }}
+              </button>
+              <button mat-flat-button type="button" [disabled]="escribiendo()" (click)="confirmar()">Confirmar</button>
+              <button mat-stroked-button type="button" [disabled]="escribiendo()" (click)="rechazar()">No</button>
+            </div>
+            @if (estaAbierto(r.purchase?.eventId)) {
+              <ng-container *ngTemplateOutlet="detalle; context: { $implicit: r.purchase?.eventId }" />
+            }
+          </mat-card>
+        }
+      }
+
+      @if (mensaje.grafico; as g) {
+        <div class="grafico">
+          <canvas baseChart [type]="g.type" [data]="g.data" [options]="g.options"></canvas>
+        </div>
+      }
+    </div>
+  }
+  @if (escribiendo()) {
+    <div class="msg agente" role="status" aria-label="HampCode está escribiendo">
+      <img class="avatar-agente" src="hampcode.svg" alt="" width="34" height="34" />
+      <p class="text typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></p>
+    </div>
+  }
+</section>
+
+<div class="ayuda">
+  <div class="atajos" aria-label="En qué te puedo ayudar">
+    @for (grupo of ayudas; track grupo.titulo) {
+      <span class="atajo-grupo">{{ grupo.titulo }}</span>
+      @for (pregunta of grupo.preguntas; track pregunta) {
+        <button type="button" class="atajo" [disabled]="escribiendo()" (click)="usar(pregunta)">{{ pregunta }}</button>
+      }
+    }
+  </div>
+  <p class="ayuda-nota">{{ limiteAgente }}</p>
+</div>
+
+@if (error()) {
+  <p class="api-error">{{ error() }}</p>
+}
+
+<form class="composer" [formGroup]="chatForm" (ngSubmit)="enviar()">
+  <mat-form-field class="input" appearance="outline" subscriptSizing="dynamic">
+    <input matInput formControlName="message" [placeholder]="esOrganizador ? 'Ej: ¿cómo van las ventas de mis eventos?' : 'Ej: quiero una entrada para el de lima'" />
+    @if (chatForm.controls.message.hasError('maxlength')) {
+      <mat-error>Máximo 1000 caracteres</mat-error>
+    }
+  </mat-form-field>
+  <button
+    mat-stroked-button
+    type="button"
+    class="mic"
+    [class.grabando]="grabando()"
+    [disabled]="escribiendo()"
+    (click)="alternarGrabacion()"
+  >
+    {{ grabando() ? 'Detener' : 'Hablar' }}
+  </button>
+  <button mat-flat-button type="submit" [disabled]="chatForm.invalid || escribiendo() || grabando()">Enviar</button>
+</form>
+
+<p class="aviso">HampCode es una IA y puede equivocarse. Verifica la información importante, como precios, fechas y compras, antes de confirmar.</p>
+  </div>
+</div>
+
+<!-- Detalle desplegable de un evento (lo usan las tarjetas de evento y la de confirmación) -->
+<ng-template #detalle let-eventId>
+  <div class="detalle">
+    @if (detalles()[eventId]; as d) {
+      <p class="event-meta">{{ d.date | date: 'EEEE d MMMM y' }} · {{ d.city }}@if (d.categoryName) { · {{ d.categoryName }} }</p>
+      <p class="event-meta">Organiza: {{ d.organizerName }}</p>
+      <p class="event-meta">Quedan {{ d.availableCapacity }} de {{ d.capacityMax }} entradas · S/ {{ d.basePrice }} cada una</p>
+    } @else {
+      <p class="event-meta">Cargando…</p>
+    }
+  </div>
+</ng-template>
+

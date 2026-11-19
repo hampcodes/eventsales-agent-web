@@ -1,0 +1,124 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.page-title {
+  margin: 0;
+  font: var(--font-display);
+}
+
+.page-subtitle {
+  margin: 0;
+  font: var(--font-body);
+  color: var(--text-muted);
+}
+
+.api-error {
+  margin: 0;
+  font: var(--font-small);
+  color: var(--state-error);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 20px 24px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+}
+
+.info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.name {
+  margin: 0;
+  font: var(--font-h2);
+}
+
+.price {
+  margin: 4px 0 0;
+  font: var(--font-body);
+  color: var(--text-muted);
+}
+
+.status {
+  font: var(--font-caption);
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+}
+
+.status.paid {
+  color: var(--state-success);
+}
+
+.status.cancelled {
+  color: var(--state-error);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ask {
+  font: var(--font-small);
+}
+
+.empty {
+  margin: 0;
+  font: var(--font-body);
+  color: var(--text-muted);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.search {
+  flex: 1;
+  min-width: 220px;
+}
+
+.detail {
+  flex-basis: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px 24px;
+  margin: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border, rgba(0, 0, 0, 0.12));
+}
+
+.detail dt {
+  font: var(--font-caption);
+  color: var(--text-muted);
+}
+
+.detail dd {
+  margin: 2px 0 0;
+  font: var(--font-body);
+}

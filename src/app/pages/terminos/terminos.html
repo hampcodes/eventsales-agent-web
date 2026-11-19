@@ -1,0 +1,59 @@
+<header class="header">
+  <a class="logo" routerLink="/">
+    <img class="logo-img" src="logo-eventsales.png" alt="EventSales" />
+  </a>
+  <a mat-stroked-button class="btn" routerLink="/">Volver al inicio</a>
+</header>
+
+<main class="pagina">
+  <section class="encabezado">
+    <span class="insignia">PROYECTO ACADÉMICO</span>
+    <h1 class="titulo">Términos y condiciones</h1>
+    <p class="actualizado">Última actualización: {{ actualizado }}</p>
+    <p class="intro">
+      EventSales es un proyecto académico creado para aprender y demostrar el desarrollo de una plataforma de venta de entradas con un agente
+      de inteligencia artificial. Lee estos términos antes de usarla.
+    </p>
+  </section>
+
+  <section class="resumen" aria-label="Resumen">
+    @for (punto of resumen; track punto.titulo) {
+      <div class="resumen-item">
+        <p class="resumen-titulo">{{ punto.titulo }}</p>
+        <p class="resumen-texto">{{ punto.texto }}</p>
+      </div>
+    }
+  </section>
+
+  <div class="contenido">
+    <nav class="indice" aria-label="Contenido">
+      <p class="indice-titulo">Contenido</p>
+      @for (seccion of secciones; track seccion.id; let i = $index) {
+        <button type="button" class="indice-link" (click)="ir(seccion.id)">{{ i + 1 }}. {{ seccion.titulo }}</button>
+      }
+    </nav>
+
+    <article class="secciones">
+      @for (seccion of secciones; track seccion.id; let i = $index) {
+        <section class="seccion" [id]="seccion.id">
+          <h2 class="seccion-titulo"><span class="numero">{{ i + 1 }}</span>{{ seccion.titulo }}</h2>
+          @for (parrafo of seccion.parrafos ?? []; track parrafo) {
+            <p>{{ parrafo }}</p>
+          }
+          @if (seccion.lista) {
+            <ul>
+              @for (item of seccion.lista; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          }
+        </section>
+      }
+    </article>
+  </div>
+</main>
+
+<footer class="pie">
+  <p>© 2026 EventSales · Proyecto académico</p>
+  <p>Elaborado por Henry Antonio Mendoza Puerta by hampcode</p>
+</footer>

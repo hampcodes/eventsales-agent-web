@@ -1,0 +1,80 @@
+<div class="page">
+  <aside class="brand-panel">
+    <a class="logo" routerLink="/">
+      <img class="logo-img" src="logo-eventsales.png" alt="EventSales" />
+    </a>
+    <img class="brand-hero" src="auth-hero-organizador.png" alt="Gráfico de ventas y entradas de un evento" />
+    <div class="brand-copy">
+      <h1 class="brand-title">Vende tus entradas sin complicaciones.</h1>
+      <p class="brand-text">Publica tus eventos, compara tus ventas con gráficos y descarga tu reporte en Excel.</p>
+    </div>
+  </aside>
+
+  <main class="form-panel">
+    <form class="form" [formGroup]="form" (ngSubmit)="crear()">
+      <h2 class="form-title">Crea tu cuenta de organizador</h2>
+      <p class="form-text">Publica tus eventos y vende entradas desde un solo lugar.</p>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Nombre del organizador</mat-label>
+        <input matInput formControlName="nombre" placeholder="Ej. Producciones Lima" />
+        @if (form.controls.nombre.hasError('required')) {
+          <mat-error>Ingresa el nombre del organizador</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>RUC</mat-label>
+        <input matInput formControlName="ruc" inputmode="numeric" placeholder="11 dígitos" />
+        @if (form.controls.ruc.hasError('required')) {
+          <mat-error>Ingresa tu RUC</mat-error>
+        } @else if (form.controls.ruc.hasError('pattern')) {
+          <mat-error>El RUC debe tener 11 dígitos</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Correo electrónico</mat-label>
+        <input matInput type="email" formControlName="email" placeholder="tu@correo.com" />
+        @if (form.controls.email.hasError('required')) {
+          <mat-error>Ingresa tu correo electrónico</mat-error>
+        } @else if (form.controls.email.hasError('email')) {
+          <mat-error>Ingresa un correo válido</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Teléfono</mat-label>
+        <input matInput type="tel" formControlName="telefono" placeholder="999 999 999" />
+        @if (form.controls.telefono.hasError('required')) {
+          <mat-error>Ingresa tu teléfono</mat-error>
+        } @else if (form.controls.telefono.hasError('minlength')) {
+          <mat-error>El teléfono debe tener al menos 9 dígitos</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Contraseña</mat-label>
+        <input matInput type="password" formControlName="password" placeholder="Mínimo 8 caracteres" />
+        @if (form.controls.password.hasError('required')) {
+          <mat-error>Ingresa una contraseña</mat-error>
+        } @else if (form.controls.password.hasError('minlength')) {
+          <mat-error>La contraseña debe tener al menos 8 caracteres</mat-error>
+        }
+      </mat-form-field>
+
+      @if (error()) {
+        <p class="api-error">{{ error() }}</p>
+      }
+
+      <button mat-flat-button class="submit" type="submit" [disabled]="form.invalid || cargando()">
+        Crear cuenta de organizador
+      </button>
+
+      <p class="form-footer">
+        <span>¿Ya tienes cuenta?</span>
+        <a routerLink="/login">Inicia sesión</a>
+      </p>
+    </form>
+  </main>
+</div>

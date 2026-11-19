@@ -1,0 +1,55 @@
+<form class="form" [formGroup]="form" (ngSubmit)="crear()">
+  <h2 class="form-title">Crea tu cuenta</h2>
+  <p class="form-text">Regístrate en menos de un minuto.</p>
+
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Nombre completo</mat-label>
+    <input matInput formControlName="nombre" placeholder="Tu nombre" />
+    @if (form.controls.nombre.hasError('required')) {
+      <mat-error>Ingresa tu nombre completo</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label>DNI</mat-label>
+    <input matInput formControlName="dni" inputmode="numeric" placeholder="8 dígitos" />
+    @if (form.controls.dni.hasError('required')) {
+      <mat-error>Ingresa tu DNI</mat-error>
+    } @else if (form.controls.dni.hasError('minlength')) {
+      <mat-error>El DNI debe tener al menos 8 dígitos</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Correo electrónico</mat-label>
+    <input matInput type="email" formControlName="email" placeholder="tu@correo.com" />
+    @if (form.controls.email.hasError('required')) {
+      <mat-error>Ingresa tu correo electrónico</mat-error>
+    } @else if (form.controls.email.hasError('email')) {
+      <mat-error>Ingresa un correo válido</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Contraseña</mat-label>
+    <input matInput type="password" formControlName="password" placeholder="Mínimo 8 caracteres" />
+    @if (form.controls.password.hasError('required')) {
+      <mat-error>Ingresa una contraseña</mat-error>
+    } @else if (form.controls.password.hasError('minlength')) {
+      <mat-error>La contraseña debe tener al menos 8 caracteres</mat-error>
+    }
+  </mat-form-field>
+
+  @if (error()) {
+    <p class="api-error">{{ error() }}</p>
+  }
+
+  <button mat-flat-button class="submit" type="submit" [disabled]="form.invalid || cargando()">
+    Crear cuenta
+  </button>
+
+  <p class="form-footer">
+    <span>¿Ya tienes cuenta?</span>
+    <a routerLink="/login">Inicia sesión</a>
+  </p>
+</form>

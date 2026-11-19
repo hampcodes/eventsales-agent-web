@@ -1,0 +1,12 @@
+[build]
+  command = "npm ci && sed -i.bak \"s|http://localhost:8080/api|$API_URL|\" src/environments/environment.ts && npx ng build"
+  publish = "dist/eventsales/browser"
+
+[build.environment]
+  NODE_VERSION = "22"
+  API_URL = "https://eventsales-agent-api.onrender.com/api"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -554,3 +554,33 @@ p {
     font-size: 14px;
   }
 }
+
+@media (max-width: 400px) {
+  .header {
+    padding: 0 10px;
+  }
+
+  .logo-img {
+    height: 28px;
+  }
+
+  .header-actions {
+    gap: 6px;
+  }
+
+  .header-actions .btn {
+    padding: 0 10px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 340px) {
+  .logo-img {
+    height: 24px;
+  }
+
+  .header-actions .btn {
+    padding: 0 8px;
+    font-size: 12px;
+  }
+}

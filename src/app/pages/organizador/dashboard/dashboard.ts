@@ -38,6 +38,16 @@ export class DashboardPage implements OnInit {
             responsive: true,
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
+            scales: {
+              x: {
+                ticks: {
+                  callback(valor) {
+                    const nombre = this.getLabelForValue(Number(valor));
+                    return nombre.length > 16 ? nombre.slice(0, 15) + '…' : nombre;
+                  },
+                },
+              },
+            },
           },
         });
       },

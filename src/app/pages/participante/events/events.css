@@ -180,3 +180,18 @@ mat-chip-option {
     width: 100%;
   }
 }
+
+@media (max-width: 600px) {
+  .image {
+    height: 150px;
+  }
+
+  .info {
+    padding: 16px;
+  }
+
+  .btn {
+    height: 44px;
+    padding: 0 16px;
+  }
+}

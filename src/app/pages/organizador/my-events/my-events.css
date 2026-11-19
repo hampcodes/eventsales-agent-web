@@ -175,3 +175,84 @@ mat-progress-bar {
 img.evento-thumb {
   object-fit: cover;
 }
+
+@media (max-width: 700px) {
+  .table-card {
+    overflow: visible;
+    background: transparent;
+    border: 0;
+  }
+
+  table {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  tr.mat-mdc-header-row {
+    display: none;
+  }
+
+  tr.mat-mdc-row {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 12px;
+    height: auto;
+    padding: 14px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: 14px;
+  }
+
+  td.mat-mdc-cell {
+    height: auto;
+    padding: 0;
+    border: 0;
+    width: auto !important;
+  }
+
+  td.mat-column-evento,
+  td.mat-column-vendidas {
+    grid-column: 1 / -1;
+  }
+
+  td.mat-column-categoria::before { content: 'Categoría'; }
+  td.mat-column-fecha::before { content: 'Fecha'; }
+  td.mat-column-ciudad::before { content: 'Ciudad'; }
+  td.mat-column-precio::before { content: 'Precio base'; }
+
+  td.mat-column-categoria::before,
+  td.mat-column-fecha::before,
+  td.mat-column-ciudad::before,
+  td.mat-column-precio::before {
+    display: block;
+    font: var(--font-caption);
+    color: var(--text-muted);
+  }
+
+  .vendidas-cell {
+    width: 100%;
+  }
+
+  td.mat-column-acciones {
+    grid-column: 1 / -1;
+  }
+
+  .editar {
+    display: block;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .search {
+    width: 100%;
+  }
+}

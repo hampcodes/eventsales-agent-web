@@ -229,3 +229,13 @@ mat-chip-option {
   font: var(--font-small);
   color: var(--state-error);
 }
+
+@media (max-width: 900px) {
+  .body {
+    align-items: stretch;
+  }
+
+  .form-card {
+    width: 100%;
+  }
+}

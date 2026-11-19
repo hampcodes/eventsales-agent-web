@@ -86,3 +86,49 @@ a {
   align-items: center;
   gap: 8px;
 }
+
+@media (max-width: 700px) {
+  .header {
+    height: auto;
+    min-height: 64px;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .logo-img {
+    height: 30px;
+  }
+
+  .user {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .avatar {
+    display: none;
+  }
+
+  .user-link {
+    font-size: 13px;
+  }
+
+  .logout,
+  .login {
+    height: 36px;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 420px) {
+  .agente-link {
+    font-size: 0;
+    gap: 0;
+  }
+
+  .agente-link img {
+    width: 28px;
+    height: 28px;
+  }
+}

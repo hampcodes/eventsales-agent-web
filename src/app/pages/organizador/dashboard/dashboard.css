@@ -128,3 +128,31 @@ a {
     grid-column: 1 / -1;
   }
 }
+
+@media (max-width: 600px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .stat {
+    padding: 14px;
+  }
+
+  .stat-value {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .panel {
+    padding: 16px;
+  }
+
+  .grafico {
+    height: 240px;
+  }
+
+  .row {
+    gap: 8px 12px;
+  }
+}

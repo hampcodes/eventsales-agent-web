@@ -122,3 +122,21 @@
   margin: 2px 0 0;
   font: var(--font-body);
 }
+
+@media (max-width: 600px) {
+  .card {
+    padding: 14px;
+  }
+
+  .info {
+    flex-basis: 100%;
+  }
+
+  .actions {
+    flex-wrap: wrap;
+  }
+
+  .detail {
+    grid-template-columns: 1fr 1fr;
+  }
+}

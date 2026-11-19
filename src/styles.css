@@ -83,3 +83,10 @@ h1 { font: var(--font-h1); margin: 0; }
 h2 { font: var(--font-h2); margin: 0; }
 a { color: var(--primary-default); }
 a:hover { color: var(--primary-hover); }
+
+@media (max-width: 600px) {
+  :root {
+    --font-display: 700 28px/36px var(--font-family);
+    --font-h1: 700 24px/32px var(--font-family);
+  }
+}

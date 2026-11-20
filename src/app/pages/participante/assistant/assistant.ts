@@ -152,16 +152,17 @@ export class Assistant implements OnInit {
     });
   }
 
-  borrar(id: string) {
-    this.agentService.deleteConversation(id).subscribe({
-      next: () => {
-        this.porBorrar.set(null);
-        if (id === this.conversacionId()) this.nueva();
-        this.cargarConversaciones();
-      },
-      error: (err) => this.error.set(err.error?.message ?? 'No se pudo borrar la conversación'),
-    });
-  }
+  // Borrar conversaciones: desactivado temporalmente
+  // borrar(id: string) {
+  //   this.agentService.deleteConversation(id).subscribe({
+  //     next: () => {
+  //       this.porBorrar.set(null);
+  //       if (id === this.conversacionId()) this.nueva();
+  //       this.cargarConversaciones();
+  //     },
+  //     error: (err) => this.error.set(err.error?.message ?? 'No se pudo borrar la conversación'),
+  //   });
+  // }
 
   enviar() {
     const texto = (this.chatForm.value.message ?? '').trim();

@@ -16,12 +16,14 @@
       @for (c of conversaciones(); track c.id) {
         <div class="item" [class.activa]="c.id === conversacionId()">
           <button type="button" class="abrir" [title]="c.title" (click)="abrir(c.id)">{{ c.title }}</button>
+          <!-- Borrar conversaciones: desactivado temporalmente
           @if (porBorrar() === c.id) {
             <button mat-button type="button" class="mini" (click)="borrar(c.id)">Borrar</button>
             <button mat-button type="button" class="mini" (click)="porBorrar.set(null)">No</button>
           } @else {
             <button type="button" class="x" aria-label="Borrar conversación" (click)="porBorrar.set(c.id)">✕</button>
           }
+          -->
         </div>
       } @empty {
         @if (errorLista()) {
